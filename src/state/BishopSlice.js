@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
     bishopX: 1,
-    bishopY: 0
+    bishopY: 7
 }
 
 export const bishopSlice = createSlice({

@@ -1,8 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-    knightX: 0,
-    knightY: 0
+    knightX: 2,
+    knightY: 7
 }
 
 export const knightSlice = createSlice({
