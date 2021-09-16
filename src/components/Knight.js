@@ -4,7 +4,7 @@ import { useDrag } from 'react-dnd'
 
 
 export default function Knight() {
-    const [{isDragging}, drag] = useDrag(() => ({
+    const [{ isDragging }, drag] = useDrag(() => ({
         type: ItemTypes.KNIGHT,
         collect: monitor => ({
             isDragging: !!monitor.isDragging(),
