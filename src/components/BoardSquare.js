@@ -13,7 +13,7 @@ export default function BoardSquare({x, y, isEmpty, children}) {
 
     const [{ isOver, canDrop }, drop] = useDrop(
         () => ({
-            accept: [ItemTypes.KNIGHT, ItemTypes.BISHOP, ItemTypes.ROOK],
+            accept: [...Object.values(ItemTypes)],
             drop: (item, monitor) => {
                 const id = item.id;
                 dispatch(movePiece({id, x, y}));
@@ -47,6 +47,18 @@ export default function BoardSquare({x, y, isEmpty, children}) {
             case 'rook': {
                 return isEmpty &&
                 (dx === 0 || dy === 0)
+            }
+            case 'pawn': {
+                return isEmpty &&
+                (dx === 0 && (piece.y === 6 ? dy === -1 || dy === -2 : dy === -1))
+            }
+            case 'queen': {
+                return isEmpty &&
+                (dx === 0 || dy === 0 || Math.abs(dx) === Math.abs(dy));
+            }
+            case 'king': {
+                return isEmpty &&
+                Math.abs(dx) <= 1 && Math.abs(dy) <= 1
             }
         }
     }

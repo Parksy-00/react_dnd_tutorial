@@ -18,7 +18,42 @@ const initialState = {
         type: 'rook',
         x: 0,
         y: 7
+    },
+    4: {
+        id: 4,
+        type: 'knight',
+        x: 5,
+        y: 7
+    },
+    5: {
+        id: 5,
+        type: 'bishop',
+        x: 6,
+        y: 7
+    },
+    6: {
+        id: 6,
+        type: 'rook',
+        x: 7,
+        y: 7
+    },
+    7: {
+        id: 7,
+        type: 'queen',
+        x: 3,
+        y: 7
+    },
+    8: {
+        id: 8,
+        type: 'king',
+        x: 4,
+        y: 7
     }
+}
+for (let x = 0; x < 8; x++) {
+    const y = 6;
+    const id = Object.keys(initialState).length + 1;
+    initialState[id] = {id, x, y, type: 'pawn'}
 }
 
 const pieceSlice = createSlice({
@@ -30,6 +65,10 @@ const pieceSlice = createSlice({
             piece.x = action.payload.x;
             piece.y = action.payload.y;
         },
+        addPiece: (state, action) => {
+            const len = state.length();
+            Object.assign(state, {id: len+1, type: action.payload.type, x: action.payload.x, y: action.payload.y})
+        }
     }
 });
 

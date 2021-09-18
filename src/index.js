@@ -11,7 +11,9 @@ import { Provider } from 'react-redux';
 ReactDOM.render(
   <Provider store={store}>
     <DndProvider backend={HTML5Backend}>
-      <Board></Board>
+      <div style={{display:'flex', justifyContent:'center', alignItems:'center', height:'100vh'}}>
+        <Board></Board>
+      </div>
     </DndProvider>
   </Provider>,
   document.getElementById('root')

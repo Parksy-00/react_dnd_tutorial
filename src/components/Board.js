@@ -2,6 +2,9 @@ import React from 'react';
 import Knight from './pieces/Knight';
 import Bishop from './pieces/Bishop';
 import Rook from './pieces/Rook';
+import Pawn from './pieces/Pawn';
+import Queen from './pieces/Queen';
+import King from './pieces/King';
 import BoardSquare from './BoardSquare';
 import { useSelector } from 'react-redux';
 
@@ -24,6 +27,9 @@ export default function Board() {
         const isKnight = type === 'knight';
         const isBishop = type === 'bishop';
         const isRook = type === 'rook';
+        const isPawn = type === 'pawn';
+        const isQueen = type === 'queen';
+        const isKing = type === 'king';
         const isEmpty = type === 'none';
 
         return (
@@ -34,6 +40,9 @@ export default function Board() {
                     {isKnight && <Knight id={id}/>}
                     {isBishop && <Bishop id={id}/>}
                     {isRook && <Rook id={id}/>}
+                    {isPawn && <Pawn id={id}/>}
+                    {isQueen && <Queen id={id}/>}
+                    {isKing && <King id={id}/>}
                 </BoardSquare>
             </div>
         );
