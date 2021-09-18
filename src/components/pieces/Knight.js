@@ -3,9 +3,10 @@ import { ItemTypes } from '../../Constants'
 import { useDrag } from 'react-dnd'
 
 
-export default function Knight() {
+export default function Knight({id}) {
     const [{ isDragging }, drag] = useDrag(() => ({
         type: ItemTypes.KNIGHT,
+        item: {id, type: 'knight'},
         collect: monitor => ({
             isDragging: !!monitor.isDragging(),
         })

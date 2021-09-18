@@ -2,87 +2,53 @@ import React from 'react'
 import { useDrop } from 'react-dnd';
 import { useDispatch, useSelector } from 'react-redux';
 import { ItemTypes } from '../Constants';
-import { moveBishop } from '../state/BishopSlice';
-import { moveKnight } from '../state/KnightSlice';
-import { moveRook } from '../state/RookSlice';
+import { movePiece } from '../state/PieceSlice';
 import Square from './Square'
 import Overlay from './Overlay';
 
-export default function BoardSquare({x, y, isFull, children}) {
+export default function BoardSquare({x, y, isEmpty, children}) {
     const black = (x + y) % 2 === 1;
     const dispatch = useDispatch();
-    const knightPos = useSelector((state) => state.knight);
-    const bishopPos = useSelector((state) => state.bishop);
-    const rookPos = useSelector((state) => state.rook);
-
+    const pieces = useSelector((state) => state.pieces);
 
     const [{ isOver, canDrop }, drop] = useDrop(
         () => ({
             accept: [ItemTypes.KNIGHT, ItemTypes.BISHOP, ItemTypes.ROOK],
             drop: (item, monitor) => {
-                const type = monitor.getItemType();
-                if (type === ItemTypes.KNIGHT) {
-                    dispatch(moveKnight({x, y}))
-                }
-                if (type === ItemTypes.BISHOP) {
-                    dispatch(moveBishop({x, y}))
-                }
-                if (type === ItemTypes.ROOK) {
-                    dispatch(moveRook({x, y}))
-                }
+                const id = item.id;
+                dispatch(movePiece({id, x, y}));
             },
             canDrop: (item, monitor) => {
-                const type = monitor.getItemType();
-                if (type === ItemTypes.BISHOP) {
-                    return canMoveBishop(bishopPos, x, y);
-                }
-                if (type === ItemTypes.KNIGHT) {
-                    return canMoveKnight(knightPos, x, y);
-                }
-                if (type === ItemTypes.ROOK) {
-                    return canMoveRook(rookPos, x, y);
-                }
+                const id = item.id
+                return canMove(pieces[id], x, y);
             },
             collect: (monitor) => ({
                 isOver: !!monitor.isOver(),
                 canDrop: !!monitor.canDrop(),
             })
         }),
-        [x, y, knightPos, bishopPos, rookPos]
+        [pieces]
     )
 
-    function canMoveKnight(knightPos, toX, toY) {
-        const { knightX, knightY } = knightPos;
-        const dx = toX - knightX;
-        const dy = toY - knightY;
-    
-        return (
-            !isFull &&
-            ((Math.abs(dx) === 2 && Math.abs(dy) === 1) ||
-            (Math.abs(dx) === 1 && Math.abs(dy) === 2))
-        )
-    }
-
-    function canMoveBishop(BishopPos, toX, toY) {
-        const { bishopX, bishopY } = BishopPos;
-        const dx = toX - bishopX;
-        const dy = toY - bishopY;
-
-        return (
-            !isFull &&
-            Math.abs(dx) === Math.abs(dy)
-        );
-    }
-
-    function canMoveRook(rookPos, toX, toY) {
-        const { rookX, rookY } = rookPos;
-        const dx = toX - rookX;
-        const dy = toY - rookY;
-
-        return (
-            !isFull &&
-            (dx === 0 || dy === 0)
-        );
+    function canMove(piece, toX, toY) {
+        const dx = toX - piece.x;
+        const dy = toY - piece.y;
+        
+        switch (piece.type) {
+            case 'knight': {
+                return isEmpty &&
+                ((Math.abs(dx) === 2 && Math.abs(dy) === 1) ||
+                (Math.abs(dx) === 1 && Math.abs(dy) === 2))
+            }
+            case 'bishop': {
+                return isEmpty &&
+                Math.abs(dx) === Math.abs(dy)
+            }
+            case 'rook': {
+                return isEmpty &&
+                (dx === 0 || dy === 0)
+            }
+        }
     }
     
     return (

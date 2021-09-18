@@ -3,9 +3,10 @@ import { ItemTypes } from '../../Constants'
 import { useDrag } from 'react-dnd'
 
 
-export default function Bishop() {
+export default function Bishop({id}) {
     const [{ isDragging }, drag] = useDrag(() => ({
         type: ItemTypes.BISHOP,
+        item: {id, type:'bishop'},
         collect: monitor => ({
             isDragging: !!monitor.isDragging(),
         })

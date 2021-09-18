@@ -4,10 +4,10 @@ export default function Overlay({color}) {
             position: 'absolute',
             top:0,
             left:0,
-            height:'102%',
-            width:'102%',
+            height:'calc(100% + 1px)',
+            width:'calc(100% + 1px)',
             zIndex:1,
-            opacity:0.6,
+            opacity:0.55,
             backgroundColor: color
         }}/>
     )

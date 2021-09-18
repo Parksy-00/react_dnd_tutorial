@@ -3,9 +3,10 @@ import { ItemTypes } from '../../Constants'
 import { useDrag } from 'react-dnd'
 
 
-export default function Rook() {
+export default function Rook({id}) {
     const [{ isDragging }, drag] = useDrag(() => ({
         type: ItemTypes.ROOK,
+        item: {id, type: 'rook'},
         collect: monitor => ({
             isDragging: !!monitor.isDragging(),
         })
