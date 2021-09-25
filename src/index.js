@@ -7,12 +7,14 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import Board from './components/Board';
 import { store } from './store';
 import { Provider } from 'react-redux';
+import Menu from './components/Menu';
 
 ReactDOM.render(
   <Provider store={store}>
     <DndProvider backend={HTML5Backend}>
       <div style={{display:'flex', justifyContent:'center', alignItems:'center', height:'100vh'}}>
         <Board></Board>
+        <Menu/>
       </div>
     </DndProvider>
   </Provider>,
