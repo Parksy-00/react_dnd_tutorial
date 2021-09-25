@@ -10,18 +10,7 @@ import { useSelector } from 'react-redux';
 
 export default function Board() {
     const pieces = useSelector((state) => state.pieces);
-
-    const squares = [];
-    for (let y = 0; y < 8; y++) {
-        squares.push([]);
-        for (let x = 0; x < 8; x++) {
-            squares[y][x] = {type: 'none', x, y}
-        }
-    }
-    Object.values(pieces).forEach(piece => {
-        squares[piece.y][piece.x].type = piece.type;
-        squares[piece.y][piece.x].id = piece.id;
-    })
+    const board = useSelector((state) => state.board);
 
     function renderSquare({id, type, x, y}) {
         const isKnight = type === 'knight';
@@ -50,7 +39,7 @@ export default function Board() {
 
     return (
             <div style={{width:'800px', height:'800px', display:'flex', flexWrap:'wrap'}}>
-                { squares.flat().map(square => renderSquare(square)) }
+                { board.flat().map(square => renderSquare(square))}
             </div>
     )
 }

@@ -2,7 +2,8 @@ import React from 'react'
 import { useDrop } from 'react-dnd';
 import { useDispatch, useSelector } from 'react-redux';
 import { ItemTypes } from '../Constants';
-import { movePiece } from '../state/PieceSlice';
+import { movePiece, addPiece } from '../state/PieceSlice';
+import { create, move } from '../state/BoardSlice'
 import Square from './Square'
 import Overlay from './Overlay';
 
@@ -10,16 +11,29 @@ export default function BoardSquare({x, y, isEmpty, children}) {
     const black = (x + y) % 2 === 1;
     const dispatch = useDispatch();
     const pieces = useSelector((state) => state.pieces);
+    const board = useSelector((state) => state.board);
 
     const [{ isOver, canDrop }, drop] = useDrop(
         () => ({
             accept: [...Object.values(ItemTypes)],
             drop: (item, monitor) => {
-                const id = item.id;
+                const {id, type} = item;
+                if (id === -1) {
+                    const keys = Object.keys(pieces);
+                    const newId = keys.length === 0 ? 1 : (Number(keys[keys.length - 1]) + 1);
+                    dispatch(create({id: newId, type, x, y}));
+                    dispatch(addPiece({type, x, y}));
+                    return;
+                }
+                const piece = pieces[id];
                 dispatch(movePiece({id, x, y}));
+                dispatch(move({id, type, x: piece.x, y: piece.y, toX: x, toY: y}));
             },
             canDrop: (item, monitor) => {
                 const id = item.id
+                if (id === -1) {
+                    return canCreate(x, y);
+                }
                 return canMove(pieces[id], x, y);
             },
             collect: (monitor) => ({
@@ -27,8 +41,12 @@ export default function BoardSquare({x, y, isEmpty, children}) {
                 canDrop: !!monitor.canDrop(),
             })
         }),
-        [pieces]
+        [pieces, board]
     )
+
+    function canCreate(x, y) {
+        return board[y][x].id === -1;
+    }
 
     function canMove(piece, toX, toY) {
         const dx = toX - piece.x;
